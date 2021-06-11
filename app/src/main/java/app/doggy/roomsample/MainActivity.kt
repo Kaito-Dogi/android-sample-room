@@ -24,9 +24,8 @@ class MainActivity : AppCompatActivity() {
 
     //Roomを使用する準備
     val database by lazy { AppDatabase.getDatabase(this) }
-    val userDao by lazy { database.userDao() }
+    private val userDao by lazy { database.userDao() }
 
-    private val userList: MutableList<User> = mutableListOf()
     private val userAdapter by lazy { UserAdapter(baseContext) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +45,13 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(baseContext, NewUserActivity::class.java)
             startActivity(intent)
         }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val userList: MutableList<User> = mutableListOf()
 
         applicationScope.launch {
             withContext(Dispatchers.IO) {

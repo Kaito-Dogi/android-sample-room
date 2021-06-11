@@ -44,6 +44,7 @@ class UserAdapter(
 
     //引数にとったデータをリストに追加
     fun addAll(items: MutableList<User>) {
+        this.items.clear()
         this.items.addAll(items)
         notifyDataSetChanged()
     }
