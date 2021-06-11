@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class UserAdapter(
     private val context: Context,
-    //private var listener: OnItemClickListener
+    private var listener: OnItemClickListener
 ): RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     private val items: MutableList<User> = mutableListOf()
@@ -19,7 +19,7 @@ class UserAdapter(
         val firstNameText: TextView = view.findViewById(R.id.first_name_text)
         val lastNameText: TextView = view.findViewById(R.id.last_name_text)
         val ageText: TextView = view.findViewById(R.id.age_text)
-//        val container: ConstraintLayout = view.findViewById(R.id.container)
+        val container: ConstraintLayout = view.findViewById(R.id.container)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,9 +33,9 @@ class UserAdapter(
         holder.lastNameText.text = item.lastName
         holder.ageText.text = item.age.toString()
 
-//        holder.container.setOnClickListener {
-//            listener.onItemClick(item)
-//        }
+        holder.container.setOnClickListener {
+            listener.onItemClick(item)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -49,7 +49,8 @@ class UserAdapter(
         notifyDataSetChanged()
     }
 
-//    interface OnItemClickListener {
-//        fun onItemClick(item: User)
-//    }
+    interface OnItemClickListener {
+        fun onItemClick(item: User)
+    }
+
 }

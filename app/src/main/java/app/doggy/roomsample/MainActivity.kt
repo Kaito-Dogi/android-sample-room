@@ -13,7 +13,8 @@ import kotlinx.coroutines.*
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        private const val USERLIST = "userList"
+        private const val USER_LIST = "userList"
+        const val USER_ID = "userId"
     }
 
     //ViewBindingを使ってみた
@@ -26,7 +27,20 @@ class MainActivity : AppCompatActivity() {
     val database by lazy { AppDatabase.getDatabase(this) }
     private val userDao by lazy { database.userDao() }
 
-    private val userAdapter by lazy { UserAdapter(baseContext) }
+    private val userAdapter by lazy {
+        UserAdapter(baseContext,object : UserAdapter.OnItemClickListener {
+            override fun onItemClick(item: User) {
+
+                val id = item.id
+                Log.d(USER_ID, id.toString())
+
+                val intent = Intent(baseContext, SaveActivity::class.java)
+                intent.putExtra(USER_ID, id)
+                startActivity(intent)
+
+            }
+        })
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = userAdapter
 
         binding.floatingActionButton.setOnClickListener {
-            val intent = Intent(baseContext, NewUserActivity::class.java)
+            val intent = Intent(baseContext, SaveActivity::class.java)
             startActivity(intent)
         }
 
@@ -56,20 +70,22 @@ class MainActivity : AppCompatActivity() {
         applicationScope.launch {
             withContext(Dispatchers.IO) {
                 userList.addAll(userDao.getAll())
-                Log.d(USERLIST, "got userList")
-                Log.d(USERLIST, userList.toString())
+                Log.d(USER_LIST, "got userList")
+                Log.d(USER_LIST, userList.toString())
 
+                //ダミーデータの生成
                 if (userList.isEmpty()) {
                     userDao.insert(User(0, "Kaito", "Dogi", 22))
-                    Log.d(USERLIST, "added dummy data.")
+                    userList.addAll(userDao.getAll())
+                    Log.d(USER_LIST, "added dummy data.")
                 } else {
-                    Log.d(USERLIST, "userList is not empty.")
+                    Log.d(USER_LIST, "userList is not empty.")
                 }
 
             }
 
             userAdapter.addAll(userList)
-            Log.d(USERLIST, "updated userAdapter")
+            Log.d(USER_LIST, "updated userAdapter")
 
         }
 
