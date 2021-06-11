@@ -28,18 +28,33 @@ class MainActivity : AppCompatActivity() {
     private val userDao by lazy { database.userDao() }
 
     private val userAdapter by lazy {
-        UserAdapter(baseContext,object : UserAdapter.OnItemClickListener {
-            override fun onItemClick(item: User) {
+        UserAdapter(
+            baseContext,
+            object : UserAdapter.OnItemClickListener {
+                override fun onItemClick(item: User) {
 
-                val id = item.id
-                Log.d(USER_ID, id.toString())
+                    val id = item.id
+                    Log.d(USER_ID, id.toString())
 
-                val intent = Intent(baseContext, SaveActivity::class.java)
-                intent.putExtra(USER_ID, id)
-                startActivity(intent)
+                    val intent = Intent(baseContext, SaveActivity::class.java)
+                    intent.putExtra(USER_ID, id)
+                    startActivity(intent)
 
-            }
-        })
+                }
+            },
+//            object : UserAdapter.OnItemLongClickListener {
+//                override fun onItemLongClick(item: User) {
+//
+//                    val id = item.id
+//                    Log.d(USER_ID, id.toString())
+//
+//                    applicationScope.launch(Dispatchers.IO) {
+//                        userDao.delete(userDao.getUser(item.id))
+//                    }
+//
+//                }
+//            }
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

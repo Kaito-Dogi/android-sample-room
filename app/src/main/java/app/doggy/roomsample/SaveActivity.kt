@@ -28,38 +28,49 @@ class SaveActivity : AppCompatActivity() {
 
         if (userId != 0) {
 
-            //MainActivityから渡されたidをもとに，Userのデータを取得したい．
+            applicationScope.launch {
 
-//            applicationScope.launch {
-//                withContext(Dispatchers.IO) {
-//                    val user = userDao.getUser(userId)
-//                }
-//                binding.firstNameEditText.setText(user.firstName)
-//                binding.lastNameEditText.setText(user.lastName)
-//                binding.ageEditText.setText(user.age.toString())
-//            }
+                //MainActivityから渡されたidをもとに，Userのデータを取得
+                val user = withContext(Dispatchers.IO) {
+                    userDao.getUser(userId)
+                }
+
+                binding.firstNameEditText.setText(user.firstName)
+                binding.lastNameEditText.setText(user.lastName)
+                binding.ageEditText.setText(user.age.toString())
+
+            }
 
             binding.saveButton.text = "UPDATE"
+
         }
 
         binding.saveButton.setOnClickListener {
-            applicationScope.launch {
-                withContext(Dispatchers.IO) {
-                    if (binding.firstNameEditText.text.toString() != "" &&
-                        binding.lastNameEditText.text.toString() != "" &&
-                        binding.ageEditText.text.toString() != ""
-                    ) {
-                        userDao.insert(User(
-                            userId,
-                            binding.firstNameEditText.text.toString(),
-                            binding.lastNameEditText.text.toString(),
-                            binding.ageEditText.text.toString().toInt()))
+            applicationScope.launch(Dispatchers.IO) {
+
+                if (binding.firstNameEditText.text.toString() != "" &&
+                    binding.lastNameEditText.text.toString() != "" &&
+                    binding.ageEditText.text.toString() != ""
+                ) {
+                    val user = User(
+                        userId,
+                        binding.firstNameEditText.text.toString(),
+                        binding.lastNameEditText.text.toString(),
+                        binding.ageEditText.text.toString().toInt())
+
+                    when(userId) {
+                        0 -> userDao.insert(user)
+                        else -> userDao.update(user)
+                    }
+
+                    finish()
+
+                } else {
+                    //空欄がある時にToastを表示
+                    launch(Dispatchers.Main) {
+                        Toast.makeText(baseContext, "Input data !", Toast.LENGTH_SHORT).show()
                     }
                 }
-
-                //データが保存されなかった時にToastを表示したい．
-
-                finish()
             }
         }
     }

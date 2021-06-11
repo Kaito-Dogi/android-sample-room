@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 
 class UserAdapter(
     private val context: Context,
-    private var listener: OnItemClickListener
+    private var clickListener: OnItemClickListener,
+    //private var longClickListener: OnItemLongClickListener,
 ): RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     private val items: MutableList<User> = mutableListOf()
@@ -34,8 +36,14 @@ class UserAdapter(
         holder.ageText.text = item.age.toString()
 
         holder.container.setOnClickListener {
-            listener.onItemClick(item)
+            clickListener.onItemClick(item)
         }
+
+//        holder.container.setOnLongClickListener {
+//            longClickListener.onItemLongClick(item)
+//            Toast.makeText(context, "Long Click", Toast.LENGTH_SHORT).show()
+//            return@setOnLongClickListener true
+//        }
     }
 
     override fun getItemCount(): Int {
@@ -52,5 +60,9 @@ class UserAdapter(
     interface OnItemClickListener {
         fun onItemClick(item: User)
     }
+
+//    interface OnItemLongClickListener {
+//        fun onItemLongClick(item: User)
+//    }
 
 }
