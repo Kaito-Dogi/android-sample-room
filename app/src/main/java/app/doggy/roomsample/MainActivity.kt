@@ -1,5 +1,6 @@
 package app.doggy.roomsample
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,10 @@ import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        private const val USERLIST = "userList"
+    }
+
     //ViewBindingを使ってみた
     private lateinit var binding: ActivityMainBinding
 
@@ -18,17 +23,11 @@ class MainActivity : AppCompatActivity() {
     private val applicationScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     //Roomを使用する準備
-    val database by lazy {
-        AppDatabase.getDatabase(this)
-    }
-    val userDao by lazy {
-        database.userDao()
-    }
+    val database by lazy { AppDatabase.getDatabase(this) }
+    val userDao by lazy { database.userDao() }
 
     private val userList: MutableList<User> = mutableListOf()
-    private val userAdapter by lazy {
-        UserAdapter(baseContext)
-    }
+    private val userAdapter by lazy { UserAdapter(baseContext) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,27 +42,29 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(baseContext)
         recyclerView.adapter = userAdapter
 
-    }
-
-    override fun onResume() {
-        super.onResume()
+        binding.floatingActionButton.setOnClickListener {
+            val intent = Intent(baseContext, NewUserActivity::class.java)
+            startActivity(intent)
+        }
 
         applicationScope.launch {
             withContext(Dispatchers.IO) {
                 userList.addAll(userDao.getAll())
-                Log.d("userList", "got userList")
-            }
-            if (userList.isEmpty()) {
-                withContext(Dispatchers.IO) {
+                Log.d(USERLIST, "got userList")
+                Log.d(USERLIST, userList.toString())
+
+                if (userList.isEmpty()) {
                     userDao.insert(User(0, "Kaito", "Dogi", 22))
-                    userList.addAll(userDao.getAll())
-                    Log.d("userList", "added dummy data.")
+                    Log.d(USERLIST, "added dummy data.")
+                } else {
+                    Log.d(USERLIST, "userList is not empty.")
                 }
-            } else {
-                Log.d("userList", "userList is not empty.")
+
             }
+
             userAdapter.addAll(userList)
-            Log.d("userList", "updated userAdapter")
+            Log.d(USERLIST, "updated userAdapter")
+
         }
 
     }
