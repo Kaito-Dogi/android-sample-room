@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 class UserAdapter(
     private val context: Context,
     private var clickListener: OnItemClickListener,
-    //private var longClickListener: OnItemLongClickListener,
+    private var longClickListener: OnItemLongClickListener,
 ): RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     private val items: MutableList<User> = mutableListOf()
@@ -39,11 +39,11 @@ class UserAdapter(
             clickListener.onItemClick(item)
         }
 
-//        holder.container.setOnLongClickListener {
-//            longClickListener.onItemLongClick(item)
-//            Toast.makeText(context, "Long Click", Toast.LENGTH_SHORT).show()
-//            return@setOnLongClickListener true
-//        }
+        holder.container.setOnLongClickListener {
+            longClickListener.onItemLongClick(item)
+            Toast.makeText(context, "Delete ${item.firstName} ${item.lastName}.", Toast.LENGTH_SHORT).show()
+            return@setOnLongClickListener true
+        }
     }
 
     override fun getItemCount(): Int {
@@ -61,8 +61,8 @@ class UserAdapter(
         fun onItemClick(item: User)
     }
 
-//    interface OnItemLongClickListener {
-//        fun onItemLongClick(item: User)
-//    }
+    interface OnItemLongClickListener {
+        fun onItemLongClick(item: User)
+    }
 
 }

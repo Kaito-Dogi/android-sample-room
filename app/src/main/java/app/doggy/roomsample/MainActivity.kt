@@ -27,7 +27,9 @@ class MainActivity : AppCompatActivity() {
     val database by lazy { AppDatabase.getDatabase(this) }
     private val userDao by lazy { database.userDao() }
 
-    private val userAdapter by lazy {
+    private val userList: MutableList<User> = mutableListOf()
+
+    private val userAdapter: UserAdapter by lazy {
         UserAdapter(
             baseContext,
             object : UserAdapter.OnItemClickListener {
@@ -42,18 +44,23 @@ class MainActivity : AppCompatActivity() {
 
                 }
             },
-//            object : UserAdapter.OnItemLongClickListener {
-//                override fun onItemLongClick(item: User) {
-//
-//                    val id = item.id
-//                    Log.d(USER_ID, id.toString())
-//
-//                    applicationScope.launch(Dispatchers.IO) {
-//                        userDao.delete(userDao.getUser(item.id))
-//                    }
-//
-//                }
-//            }
+            object : UserAdapter.OnItemLongClickListener {
+                override fun onItemLongClick(item: User) {
+
+                    val id = item.id
+                    Log.d(USER_ID, id.toString())
+
+                    applicationScope.launch {
+                        withContext(Dispatchers.IO) {
+                            userDao.delete(userDao.getUser(item.id))
+                            userList.addAll(userDao.getAll())
+                        }
+                        userAdapter.addAll(userList)
+                        userList.clear()
+                    }
+
+                }
+            }
         )
     }
 
@@ -80,9 +87,8 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        val userList: MutableList<User> = mutableListOf()
-
         applicationScope.launch {
+
             withContext(Dispatchers.IO) {
                 userList.addAll(userDao.getAll())
                 Log.d(USER_LIST, "got userList")
@@ -96,11 +102,11 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     Log.d(USER_LIST, "userList is not empty.")
                 }
-
             }
 
             userAdapter.addAll(userList)
             Log.d(USER_LIST, "updated userAdapter")
+            userList.clear()
 
         }
 

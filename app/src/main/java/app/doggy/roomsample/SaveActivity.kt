@@ -68,7 +68,7 @@ class SaveActivity : AppCompatActivity() {
                 } else {
                     //空欄がある時にToastを表示
                     launch(Dispatchers.Main) {
-                        Toast.makeText(baseContext, "Input data !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(baseContext, "Input data!", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
