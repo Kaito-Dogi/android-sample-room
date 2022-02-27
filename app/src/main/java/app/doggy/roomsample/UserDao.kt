@@ -5,31 +5,28 @@ import androidx.room.*
 @Dao
 interface UserDao {
 
+    // CREATE
     @Insert
     fun insert(user : User)
 
-    @Insert
-    fun insertAll(vararg users: User)
-
-    @Update
-    fun update(user : User)
-
-    @Delete
-    fun delete(user: User)
-
-    @Query("delete from users")
-    fun deleteAll()
-
+    // READ
     @Query("select * from users")
     fun getAll(): List<User>
 
     @Query("select * from users where id = :id")
     fun getUser(id: Int): User
 
-    @Query("SELECT * FROM users WHERE first_name LIKE :first AND " +
-            "last_name LIKE :last LIMIT 1")
+    @Query("SELECT * FROM users WHERE first_name LIKE :first AND last_name LIKE :last LIMIT 1")
     fun findByName(first: String, last: String): User
 
-    @Query("SELECT * FROM users WHERE id IN (:userIds)")
-    fun loadAllByIds(userIds: IntArray): List<User>
+    // UPDATE
+    @Update
+    fun update(user : User)
+
+    // DELETE
+    @Delete
+    fun delete(user: User)
+
+    @Query("delete from users")
+    fun deleteAll()
 }
