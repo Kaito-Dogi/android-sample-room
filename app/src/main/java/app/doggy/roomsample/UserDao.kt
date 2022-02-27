@@ -7,7 +7,7 @@ interface UserDao {
 
     // CREATE
     @Insert
-    fun insert(user : User)
+    fun insert(user: User)
 
     // READ
     @Query("select * from users")
@@ -21,7 +21,7 @@ interface UserDao {
 
     // UPDATE
     @Update
-    fun update(user : User)
+    fun update(user: User)
 
     // DELETE
     @Delete
