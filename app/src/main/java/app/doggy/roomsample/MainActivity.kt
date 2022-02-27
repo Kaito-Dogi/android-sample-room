@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
 
     private val userAdapter: UserAdapter by lazy {
         UserAdapter(
-            baseContext,
             object : UserAdapter.OnItemClickListener {
                 override fun onItemClick(item: User) {
 

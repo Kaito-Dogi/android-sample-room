@@ -1,13 +1,11 @@
 package app.doggy.roomsample
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.doggy.roomsample.databinding.UserListItemBinding
 
 class UserAdapter(
-    // private val context: Context,
     private var clickListener: OnItemClickListener,
     private var longClickListener: OnItemLongClickListener,
 ): RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
@@ -31,7 +29,6 @@ class UserAdapter(
 
         holder.binding.container.setOnLongClickListener {
             longClickListener.onItemLongClick(item)
-            // Toast.makeText(context, "Delete ${item.firstName} ${item.lastName}.", Toast.LENGTH_SHORT).show()
             return@setOnLongClickListener true
         }
     }
