@@ -50,6 +50,8 @@ class UserAdapter(
         return items.size
     }
 
+    class UserViewHolder(val binding: UserListItemBinding) : RecyclerView.ViewHolder(binding.root)
+
     //引数にとったデータをリストに追加
     fun addAll(items: MutableList<User>) {
         this.items.clear()

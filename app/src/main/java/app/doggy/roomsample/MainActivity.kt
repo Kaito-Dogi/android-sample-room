@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
         const val USER_ID = "userId"
     }
 
-    //ViewBindingを使ってみた
     private lateinit var binding: ActivityMainBinding
 
     //CoroutineScopeをMainに設定
