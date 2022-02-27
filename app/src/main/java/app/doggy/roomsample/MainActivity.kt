@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(baseContext)
         recyclerView.adapter = userAdapter
 
-        binding.floatingActionButton.setOnClickListener {
+        binding.fab.setOnClickListener {
             val intent = Intent(baseContext, SaveActivity::class.java)
             startActivity(intent)
         }
